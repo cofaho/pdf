@@ -1,0 +1,18 @@
+{
+    "name": "cofaho/pdf",
+    "type": "library",
+    "description": "PDF API",
+    "keywords": ["pdf"],
+    "license": "MIT",
+    "require": {
+        "phenx/php-font-lib": "^0.5.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "pdf\\": "src/pdf"
+        }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "8"
+    }
+}
