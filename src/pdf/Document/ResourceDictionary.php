@@ -1,6 +1,6 @@
 <?php
 
-namespace lib\Document;
+namespace pdf\Document;
 
 
 use pdf\ObjectType\ArrayObject;

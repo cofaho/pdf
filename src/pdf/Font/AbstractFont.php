@@ -8,7 +8,7 @@ use pdf\ObjectType\NameObject;
 
 /**
  * @property-read string|NameObject Type
- * @property NameObject Subtype
+ * @property-read  NameObject Subtype
  */
 abstract class AbstractFont extends DictionaryObject
 {

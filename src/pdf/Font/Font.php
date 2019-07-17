@@ -90,15 +90,19 @@ abstract class Font
         return $font;
     }
 
+    public static function hasFont($fontName)
+    {
+        return isset(self::$definedFonts[$fontName]);
+    }
+
     /**
-     * @param string $fontName
      * @param AbstractFont|string $font
      */
-    public static function addFont($fontName, $font)
+    public static function addFont($font)
     {
         if (!($font instanceof AbstractFont)) {
             //TODO: implement
         }
-        self::$fonts[$fontName] = $font;
+        self::$fonts[$font] = $font;
     }
 }
