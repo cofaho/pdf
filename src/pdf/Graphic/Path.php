@@ -16,10 +16,11 @@ class Path extends AbstractGraphic
      * @param $x
      * @param $y
      */
-    public function __construct($x, $y)
+    public function __construct($x = null, $y = null)
     {
-        $this->begin($x, $y);
-        parent::__construct();
+        if ($x !== null && $y !== null) {
+            $this->begin($x, $y);
+        }
     }
 
     /**
@@ -30,8 +31,7 @@ class Path extends AbstractGraphic
         if (!$this->isFinished) {
             $this->stroke();
         }
-        $this->data = join('', $this->parts);
-        return parent::__toString();
+        return join("\n", $this->parts);
     }
 
     /**
@@ -44,7 +44,7 @@ class Path extends AbstractGraphic
         if ($this->isFinished) {
             $this->begin($x, $y);
         } else {
-            $this->parts[] = "\n$x $y l";
+            $this->parts[] = "$x $y l";
         }
         return $this;
     }
@@ -65,11 +65,11 @@ class Path extends AbstractGraphic
             if ($p2 === null) {
                 $this->lineTo($p3->x, $p3->y);
             }
-            $this->parts[] = "{$p2->getXY()} {$p3->getXY()} v\n";
+            $this->parts[] = "{$p2->getXY()} {$p3->getXY()} v";
         } elseif ($p2 === null) {
-            $this->parts[] = "{$p1->getXY()} {$p3->getXY()} y\n";
+            $this->parts[] = "{$p1->getXY()} {$p3->getXY()} y";
         } else {
-            $this->parts[] = "{$p1->getXY()} {$p2->getXY()} {$p3->getXY()} c\n";
+            $this->parts[] = "{$p1->getXY()} {$p2->getXY()} {$p3->getXY()} c";
         }
 
         return $this;
@@ -96,7 +96,7 @@ class Path extends AbstractGraphic
     public function close()
     {
         if (!$this->isFinished) {
-            $this->parts[] = "\nh";
+            $this->parts[] = 'h';
             $this->isFinished = true;
         }
 
@@ -109,7 +109,7 @@ class Path extends AbstractGraphic
     public function end()
     {
         if (!$this->isFinished) {
-            $this->parts[] = "\nn";
+            $this->parts[] = 'n';
             $this->isFinished = true;
         }
 
@@ -122,7 +122,7 @@ class Path extends AbstractGraphic
     public function closeAndStroke()
     {
         if (!$this->isFinished) {
-            $this->parts[] = "\ns";
+            $this->parts[] = 's';
             $this->isFinished = true;
         }
 
@@ -136,7 +136,7 @@ class Path extends AbstractGraphic
     public function fillAndStroke($useEvenOddRule = false)
     {
         if (!$this->isFinished) {
-            $this->parts[] = "\nB";
+            $this->parts[] = 'B';
             if ($useEvenOddRule) {
                 $this->parts[] = '*';
             }
@@ -153,7 +153,7 @@ class Path extends AbstractGraphic
     public function closeFillAndStroke($useEvenOddRule = false)
     {
         if (!$this->isFinished) {
-            $this->parts[] = "\nb";
+            $this->parts[] = 'b';
             if ($useEvenOddRule) {
                 $this->parts[] = '*';
             }
@@ -169,7 +169,7 @@ class Path extends AbstractGraphic
     public function stroke()
     {
         if (!$this->isFinished) {
-            $this->parts[] = "\nS";
+            $this->parts[] = 'S';
             $this->isFinished = true;
         }
 
@@ -183,7 +183,7 @@ class Path extends AbstractGraphic
     public function fill($useEvenOddRule = false)
     {
         if (!$this->isFinished) {
-            $this->parts[] = "\nf";
+            $this->parts[] = 'f';
             if ($useEvenOddRule) {
                 $this->parts[] = '*';
             }
@@ -202,11 +202,13 @@ class Path extends AbstractGraphic
      */
     public function rectangle($x, $y, $width, $height)
     {
-        if ($this->isFinished) {
-            $this->stroke();
-        }
-        $this->parts[] = "$x $y $width $height re\n";
-        $this->isFinished = true;
+        $this->parts[] = "$x $y $width $height re";
+        $this->isFinished = false;
         return $this;
+    }
+
+    public function setFillColor()
+    {
+
     }
 }

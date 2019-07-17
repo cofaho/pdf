@@ -29,22 +29,10 @@ class Text extends AbstractGraphic
      */
     protected $operators = [];
 
-    public function __construct($text = null)
+    public function __toString(): string
     {
-        if ($text !== null) {
-            if (!($text instanceof StringObject)) {
-                $text = new StringObject($text);
-            }
-            $this->showText($text);
-        }
-        parent::__construct();
-    }
-
-    public function __toString()
-    {
-        $this->data = "BT\n/F1 22 Tf\n{$this->getOperators()}\nET";
-
-        return parent::__toString();
+        // TODO: remove font
+        return "BT\n/F1 22 Tf\n{$this->getOperators()}\nET";
     }
 
     /**
@@ -117,7 +105,7 @@ class Text extends AbstractGraphic
      * @param Matrix $matrix
      * @return $this
      */
-    public function setTextMatrix(Matrix $matrix)
+    public function setMatrix(Matrix $matrix)
     {
         $this->operators[] = $matrix . ' Tm';
         return $this;
@@ -130,12 +118,13 @@ class Text extends AbstractGraphic
     }
 
     /**
-     * @param StringObject $text
+     * @param string $text
      * @return $this
      */
-    public function showText(StringObject $text)
+    public function addText(string $text)
     {
-        $this->operators[] = $text . ' Tj';
+        $oText = new StringObject($text);
+        $this->operators[] = $oText . ' Tj';
         return $this;
     }
 

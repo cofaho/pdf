@@ -3,9 +3,9 @@
 namespace pdf\Graphic;
 
 
-use pdf\ObjectType\Stream\StreamObject;
+use pdf\ObjectType\PdfObject;
 
-abstract class AbstractGraphic extends StreamObject
+abstract class AbstractGraphic implements PdfObject
 {
 
 }
