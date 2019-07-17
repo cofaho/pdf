@@ -39,6 +39,17 @@ class Matrix
         }
     }
 
+    public static function identity(int $size)
+    {
+        $values = [];
+        for($i = 0; $i < $size; ++$i) {
+            $row = [];
+            $row[$i] = 1;
+            $values[] = $row;
+        }
+        return new Matrix($size, $size, $values);
+    }
+
     public function __toString()
     {
         return sprintf("%.3F %.3F %.3F %.3F %.3F %.3F",
