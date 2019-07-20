@@ -4,35 +4,31 @@ namespace pdf\Graphic;
 
 
 use pdf\DataStructure\Matrix;
+use pdf\Document\Page\PageContentsInterface;
+use pdf\Graphic\Operator\Text\TextInterface;
+use pdf\Helper\Math;
 use pdf\ObjectType\ArrayObject;
+use pdf\ObjectType\NameObject;
 use pdf\ObjectType\StringObject;
 
-class Text extends AbstractGraphic
+trait Text
 {
-    const RENDERING_MODE_FILL = 0;
-
-    const RENDERING_MODE_STROKE = 1;
-
-    const RENDERING_MODE_FILL_STROKE = 2;
-
-    const RENDERING_MODE_INVISIBLE = 3;
-
-    const RENDERING_MODE_FILL_CLIP = 4;
-
-    const RENDERING_MODE_STROKE_CLIP = 5;
-
-    const RENDERING_MODE_FILL_STROKE_CLIP = 6;
-
-    const RENDERING_MODE_CLIP = 7;
     /**
-     * @var array
+     * @return TextInterface
      */
-    protected $operators = [];
-
-    public function __toString(): string
+    public function beginText(): TextInterface
     {
-        // TODO: remove font
-        return "BT\n/F1 22 Tf\n{$this->getOperators()}\nET";
+        $this->operators[] = 'BT';
+        return $this;
+    }
+
+    /**
+     * @return PageContentsInterface
+     */
+    public function endText(): PageContentsInterface
+    {
+        $this->operators[] = 'ET';
+        return $this;
     }
 
     /**
@@ -41,7 +37,7 @@ class Text extends AbstractGraphic
      */
     public function setCharacterSpacing(float $charSpace)
     {
-        $this->operators[] = $charSpace . ' Tc';
+        $this->operators[] = Math::floatToStr($charSpace) . ' Tc';
         return $this;
     }
 
@@ -51,7 +47,7 @@ class Text extends AbstractGraphic
      */
     public function setWordSpacing(float $wordSpace)
     {
-        $this->operators[] = $wordSpace . ' Tw';
+        $this->operators[] = Math::floatToStr($wordSpace) . ' Tw';
         return $this;
     }
 
@@ -61,41 +57,68 @@ class Text extends AbstractGraphic
      */
     public function setHorizontalScaling(float $scale)
     {
-        $this->operators[] = $scale . ' Tz';
+        $this->operators[] = Math::floatToStr($scale) . ' Tz';
         return $this;
     }
 
+    /**
+     * @param $leading
+     * @return $this
+     */
     public function setLeading($leading)
     {
         $this->operators[] = $leading . ' TL';
         return $this;
     }
 
-    public function setFont($font, $size)
+    /**
+     * @param string|NameObject $font
+     * @param float $size
+     * @return $this
+     */
+    public function setFont($font, float $size)
     {
-        $this->operators[] = $font . ' ' . $size . ' Tf';
+        $this->operators[] = $font . ' ' . Math::floatToStr($size) . ' Tf';
         return $this;
     }
 
-    public function setRenderingMode($render)
+    /**
+     * @param int $render
+     * @return $this
+     */
+    public function setRenderingMode(int $render)
     {
         $this->operators[] = $render . ' Tr';
         return $this;
     }
 
+    /**
+     * @param int $rise
+     * @return $this
+     */
     public function setRise(int $rise)
     {
         $this->operators[] = $rise . ' Ts';
         return $this;
     }
 
-    public function nextLine($tx, $ty)
+    /**
+     * @param $tx
+     * @param $ty
+     * @return TextInterface
+     */
+    public function nextLine($tx, $ty): TextInterface
     {
         $this->operators[] = $tx . ' ' . $ty . ' Td';
         return $this;
     }
 
-    public function nextLineSetLeading($tx, $ty)
+    /**
+     * @param $tx
+     * @param $ty
+     * @return TextInterface
+     */
+    public function nextLineSetLeading($tx, $ty): TextInterface
     {
         $this->operators[] = $tx . ' ' . $ty . ' TD';
         return $this;
@@ -103,15 +126,18 @@ class Text extends AbstractGraphic
 
     /**
      * @param Matrix $matrix
-     * @return $this
+     * @return TextInterface
      */
-    public function setMatrix(Matrix $matrix)
+    public function setMatrix(Matrix $matrix): TextInterface
     {
         $this->operators[] = $matrix . ' Tm';
         return $this;
     }
 
-    public function nextLineStart()
+    /**
+     * @return TextInterface
+     */
+    public function nextLineStart(): TextInterface
     {
         $this->operators[] = 'T*';
         return $this;
@@ -119,9 +145,9 @@ class Text extends AbstractGraphic
 
     /**
      * @param string $text
-     * @return $this
+     * @return TextInterface
      */
-    public function addText(string $text)
+    public function addText(string $text): TextInterface
     {
         $oText = new StringObject($text);
         $this->operators[] = $oText . ' Tj';
@@ -130,9 +156,9 @@ class Text extends AbstractGraphic
 
     /**
      * @param StringObject $text
-     * @return $this
+     * @return TextInterface
      */
-    public function showTextOnNextLine(StringObject $text)
+    public function addTextOnNextLine(StringObject $text): TextInterface
     {
         $this->operators[] = $text . " '";
         return $this;
@@ -142,9 +168,9 @@ class Text extends AbstractGraphic
      * @param float $aw Word spacing
      * @param float $ac Character spacing
      * @param StringObject $text
-     * @return $this
+     * @return TextInterface
      */
-    public function showTextOnNextLineWithSpacings($aw, $ac, StringObject $text)
+    public function addTextOnNextLineWithSpacings($aw, $ac, StringObject $text): TextInterface
     {
         $this->operators[] = "$aw $ac $text \"";
         return $this;
@@ -152,25 +178,11 @@ class Text extends AbstractGraphic
 
     /**
      * @param ArrayObject $texts
-     * @return $this
+     * @return TextInterface
      */
-    public function showTexts(ArrayObject $texts)
+    public function addTexts(ArrayObject $texts): TextInterface
     {
         $this->operators[] = $texts . ' TJ';
         return $this;
     }
-
-
-
-    protected function getOperators()
-    {
-        if (empty($this->operators)) {
-            return '';
-        }
-
-        return implode("\n", $this->operators);
-    }
-
-
-
 }

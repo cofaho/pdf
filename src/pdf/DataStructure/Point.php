@@ -3,6 +3,8 @@
 namespace pdf\DataStructure;
 
 
+use pdf\Helper\Math;
+
 class Point
 {
     /**
@@ -25,6 +27,14 @@ class Point
     }
 
     /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return Math::floatToStr($this->x) . ' ' . Math::floatToStr($this->y);
+    }
+
+    /**
      * @param float $x
      * @param float $y
      * @return Point
@@ -35,14 +45,4 @@ class Point
         $this->y = $y;
         return $this;
     }
-
-    /**
-     * @param string $glue
-     * @return string
-     */
-    public function getXY($glue = ' ')
-    {
-        return $this->x . $glue . $this->y;
-    }
-
 }

@@ -3,7 +3,12 @@
 namespace pdf\ObjectType;
 
 
-class ArrayObject implements PdfObject, \ArrayAccess, \Iterator, \Countable
+use ArrayAccess;
+use Countable;
+use Iterator;
+use pdf\Helper\Math;
+
+class ArrayObject implements PdfObject, ArrayAccess, Iterator, Countable
 {
     /**
      * @var array
@@ -42,23 +47,35 @@ class ArrayObject implements PdfObject, \ArrayAccess, \Iterator, \Countable
 
     /**
      * ArrayAccess interface
+     * @param $key
+     * @return bool
      */
     public function offsetExists($key): bool
     {
         return isset($this->items[$key]);
     }
 
+    /**
+     * @param mixed $key
+     * @return mixed|null
+     */
     public function offsetGet($key)
     {
         return $this->items[$key] ?? null;
     }
 
+    /**
+     * @param mixed $key
+     * @param mixed $value
+     */
     public function offsetSet($key, $value): void
     {
         if ($value === null) {
             $value = 'null';
         } elseif (is_bool($value)) {
             $value = $value ? 'true' : 'false';
+        } elseif (is_float($value)) {
+            $value = Math::floatToStr($value);
         }
 
         if ($key === null) {
@@ -68,6 +85,9 @@ class ArrayObject implements PdfObject, \ArrayAccess, \Iterator, \Countable
         }
     }
 
+    /**
+     * @param mixed $key
+     */
     public function offsetUnset($key): void
     {
         unset($this->items[$key]);

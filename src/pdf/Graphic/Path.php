@@ -4,211 +4,150 @@ namespace pdf\Graphic;
 
 
 use pdf\DataStructure\Point;
+use pdf\Document\Page\PageContentsInterface;
+use pdf\Graphic\Operator\Path\PathInterface;
+use pdf\Graphic\Operator\Path\PathPaintingInterface;
+use pdf\Helper\Math;
 
-class Path extends AbstractGraphic
+trait Path
 {
-    protected $parts = [];
-
-    protected $isFinished = true;
-
     /**
-     * Path constructor.
-     * @param $x
-     * @param $y
+     * @param float $x
+     * @param float $y
+     * @return PathInterface
      */
-    public function __construct($x = null, $y = null)
+    public function moveTo(float $x, float $y): PathInterface
     {
-        if ($x !== null && $y !== null) {
-            $this->begin($x, $y);
-        }
-    }
-
-    /**
-     * @return string
-     */
-    public function __toString(): string
-    {
-        if (!$this->isFinished) {
-            $this->stroke();
-        }
-        return join("\n", $this->parts);
-    }
-
-    /**
-     * @param $x
-     * @param $y
-     * @return $this
-     */
-    public function lineTo($x, $y)
-    {
-        if ($this->isFinished) {
-            $this->begin($x, $y);
-        } else {
-            $this->parts[] = "$x $y l";
-        }
+        $x = Math::floatToStr($x);
+        $y = Math::floatToStr($y);
+        $this->operators[] = "$x $y m";
         return $this;
     }
 
     /**
-     * @param Point|null $p1 control point for current position
-     * @param Point|null $p2 control point for final position
-     * @param Point $p3 final point of the curve
-     * @return $this
+     * @param float $x
+     * @param float $y
+     * @param float $width
+     * @param float $height
+     * @return PathInterface
      */
-    public function bezierCurve(Point $p1, Point $p2, Point $p3)
+    public function rectangle(float $x, float $y, float $width, float $height): PathInterface
     {
-        if ($this->isFinished) {
-            $this->begin($p1->x, $p1->y);
-        }
+        $x = Math::floatToStr($x);
+        $y = Math::floatToStr($y);
+        $width = Math::floatToStr($width);
+        $height = Math::floatToStr($height);
+        $this->operators[] = "$x $y $width $height re";
+        return $this;
+    }
 
+    /**
+     * @param float $x
+     * @param float $y
+     * @return PathInterface
+     */
+    public function lineTo(float $x, float $y): PathInterface
+    {
+        $x = Math::floatToStr($x);
+        $y = Math::floatToStr($y);
+        $this->operators[] = "$x $y l";
+        return $this;
+    }
+
+    /**
+     * @param Point $p1
+     * @param Point $p2
+     * @param Point $p3
+     * @return PathInterface
+     */
+    public function bezierCurve(Point $p1, Point $p2, Point $p3): PathInterface
+    {
         if ($p1 === null) {
             if ($p2 === null) {
                 $this->lineTo($p3->x, $p3->y);
             }
-            $this->parts[] = "{$p2->getXY()} {$p3->getXY()} v";
+            $this->operators[] = $p2 . ' ' . $p3 . ' v';
         } elseif ($p2 === null) {
-            $this->parts[] = "{$p1->getXY()} {$p3->getXY()} y";
+            $this->operators[] = $p1 . ' ' . $p3 . ' y';
         } else {
-            $this->parts[] = "{$p1->getXY()} {$p2->getXY()} {$p3->getXY()} c";
+            $this->operators[] = $p1 . ' ' . $p2 . ' ' . $p3 . ' c';
         }
-
         return $this;
     }
 
     /**
-     * @param $x
-     * @param $y
-     * @return $this
+     * @return PathInterface
      */
-    public function begin($x, $y)
+    public function closePath(): PathInterface
     {
-        if (!$this->isFinished) {
-            $this->stroke();
-        }
-        $this->parts[] = "$x $y m";
-        $this->isFinished = false;
-        return $this;
-    }
-
-    /**
-     * @return $this
-     */
-    public function close()
-    {
-        if (!$this->isFinished) {
-            $this->parts[] = 'h';
-            $this->isFinished = true;
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return $this
-     */
-    public function end()
-    {
-        if (!$this->isFinished) {
-            $this->parts[] = 'n';
-            $this->isFinished = true;
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return $this
-     */
-    public function closeAndStroke()
-    {
-        if (!$this->isFinished) {
-            $this->parts[] = 's';
-            $this->isFinished = true;
-        }
-
+        $this->operators[] = 'h';
         return $this;
     }
 
     /**
      * @param bool $useEvenOddRule
-     * @return $this
+     * @return PathPaintingInterface
      */
-    public function fillAndStroke($useEvenOddRule = false)
+    public function clip($useEvenOddRule = false): PathPaintingInterface
     {
-        if (!$this->isFinished) {
-            $this->parts[] = 'B';
-            if ($useEvenOddRule) {
-                $this->parts[] = '*';
-            }
-            $this->isFinished = true;
-        }
+        $this->operators[] = 'W' . ($useEvenOddRule ? '*' : '');
+        return $this;
+    }
 
+    /**
+     * @return PageContentsInterface
+     */
+    public function stroke(): PageContentsInterface
+    {
+        $this->operators[] = 'S';
+        return $this;
+    }
+
+    /**
+     * @return PageContentsInterface
+     */
+    public function closeAndStroke(): PageContentsInterface
+    {
+        $this->operators[] = 's';
         return $this;
     }
 
     /**
      * @param bool $useEvenOddRule
-     * @return $this
+     * @return PageContentsInterface
      */
-    public function closeFillAndStroke($useEvenOddRule = false)
+    public function fill($useEvenOddRule = false): PageContentsInterface
     {
-        if (!$this->isFinished) {
-            $this->parts[] = 'b';
-            if ($useEvenOddRule) {
-                $this->parts[] = '*';
-            }
-            $this->isFinished = true;
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return $this
-     */
-    public function stroke()
-    {
-        if (!$this->isFinished) {
-            $this->parts[] = 'S';
-            $this->isFinished = true;
-        }
-
+        $this->operators[] = 'f' . ($useEvenOddRule ? '*' : '');
         return $this;
     }
 
     /**
      * @param bool $useEvenOddRule
-     * @return $this
+     * @return PageContentsInterface
      */
-    public function fill($useEvenOddRule = false)
+    public function fillAndStroke($useEvenOddRule = false): PageContentsInterface
     {
-        if (!$this->isFinished) {
-            $this->parts[] = 'f';
-            if ($useEvenOddRule) {
-                $this->parts[] = '*';
-            }
-            $this->isFinished = true;
-        }
-
+        $this->operators[] = 'B' . ($useEvenOddRule ? '*' : '');
         return $this;
     }
 
     /**
-     * @param $x
-     * @param $y
-     * @param $width
-     * @param $height
-     * @return $this
+     * @param bool $useEvenOddRule
+     * @return PageContentsInterface
      */
-    public function rectangle($x, $y, $width, $height)
+    public function closeFillAndStroke($useEvenOddRule = false): PageContentsInterface
     {
-        $this->parts[] = "$x $y $width $height re";
-        $this->isFinished = false;
+        $this->operators[] = 'b' . ($useEvenOddRule ? '*' : '');
         return $this;
     }
 
-    public function setFillColor()
+    /**
+     * @return PageContentsInterface
+     */
+    public function endPath(): PageContentsInterface
     {
-
+        $this->operators[] = 'n';
+        return $this;
     }
 }

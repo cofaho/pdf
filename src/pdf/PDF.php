@@ -204,12 +204,24 @@ class PDF
         foreach ($objects as $object) {
             if ($object instanceof IndirectObject) {
                 $this->writeIndirectPageObject($object);
+            } elseif ($object instanceof StreamObject) {
+                $this->writeIndirectPageObject($this->createIndirectObject($object));
             } else {
                 $data[] = (string)$object;
             }
         }
+        if (!empty($data)) {
+            $stream = new StreamObject();
+            $stream->setData(implode("\n", $data));
+            $this->writeIndirectPageObject($this->createIndirectObject($stream));
+        }
+        return $this;
+    }
+
+    public function writePageContent(string $content): PDF
+    {
         $stream = new StreamObject();
-        $stream->setData(implode("\n", $data));
+        $stream->setData($content);
         $this->writeIndirectPageObject($this->createIndirectObject($stream));
         return $this;
     }

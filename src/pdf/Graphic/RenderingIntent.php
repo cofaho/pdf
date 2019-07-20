@@ -3,7 +3,7 @@
 namespace pdf\Graphic;
 
 
-abstract class RenderingIdent
+abstract class RenderingIntent
 {
     const ABSOLUTE_COLORIMETRIC = '/AbsoluteColorimetric';
 
