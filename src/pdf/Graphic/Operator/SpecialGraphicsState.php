@@ -4,23 +4,23 @@ namespace pdf\Graphic\Operator;
 
 
 use pdf\DataStructure\Matrix;
-use pdf\Document\Page\PageContentsInterface;
+use pdf\Document\Page\PageDescriptionInterface;
 
 trait SpecialGraphicsState
 {
     /**
-     * @return PageContentsInterface
+     * @return PageDescriptionInterface
      */
-    public function saveState(): PageContentsInterface
+    public function saveState(): PageDescriptionInterface
     {
         $this->data[] = 'q';
         return $this;
     }
 
     /**
-     * @return PageContentsInterface
+     * @return PageDescriptionInterface
      */
-    public function restoreState(): PageContentsInterface
+    public function restoreState(): PageDescriptionInterface
     {
         $this->data[] = 'Q';
         return $this;
@@ -28,9 +28,9 @@ trait SpecialGraphicsState
 
     /**
      * @param Matrix $matrix
-     * @return PageContentsInterface
+     * @return PageDescriptionInterface
      */
-    public function concatCurrentTransformationMatrix(Matrix $matrix): PageContentsInterface
+    public function concatCurrentTransformationMatrix(Matrix $matrix): PageDescriptionInterface
     {
         $this->data[] = $matrix . ' cm';
         return $this;

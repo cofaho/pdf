@@ -3,15 +3,15 @@
 namespace pdf\Graphic\Operator;
 
 
-use pdf\Document\Page\PageContentsInterface;
+use pdf\Document\Page\PageDescriptionInterface;
 
 trait ExternalObject
 {
     /**
      * @param $name
-     * @return PageContentsInterface
+     * @return PageDescriptionInterface
      */
-    public function addXObject($name): PageContentsInterface
+    public function addXObject($name): PageDescriptionInterface
     {
         $this->data[] = $name . ' Do';
         return $this;

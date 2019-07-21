@@ -4,7 +4,7 @@ namespace pdf\Graphic;
 
 
 use pdf\DataStructure\Matrix;
-use pdf\Document\Page\PageContentsInterface;
+use pdf\Document\Page\PageDescriptionInterface;
 use pdf\Graphic\Operator\Text\TextInterface;
 use pdf\Helper\Math;
 use pdf\ObjectType\ArrayObject;
@@ -23,9 +23,9 @@ trait Text
     }
 
     /**
-     * @return PageContentsInterface
+     * @return PageDescriptionInterface
      */
-    public function endText(): PageContentsInterface
+    public function endText(): PageDescriptionInterface
     {
         $this->data[] = 'ET';
         return $this;

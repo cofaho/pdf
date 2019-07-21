@@ -4,7 +4,7 @@ namespace pdf\Graphic;
 
 
 use pdf\DataStructure\Point;
-use pdf\Document\Page\PageContentsInterface;
+use pdf\Document\Page\PageDescriptionInterface;
 use pdf\Graphic\Operator\Path\PathInterface;
 use pdf\Graphic\Operator\Path\PathPaintingInterface;
 use pdf\Helper\Math;
@@ -95,18 +95,18 @@ trait Path
     }
 
     /**
-     * @return PageContentsInterface
+     * @return PageDescriptionInterface
      */
-    public function stroke(): PageContentsInterface
+    public function stroke(): PageDescriptionInterface
     {
         $this->data[] = 'S';
         return $this;
     }
 
     /**
-     * @return PageContentsInterface
+     * @return PageDescriptionInterface
      */
-    public function closeAndStroke(): PageContentsInterface
+    public function closeAndStroke(): PageDescriptionInterface
     {
         $this->data[] = 's';
         return $this;
@@ -114,9 +114,9 @@ trait Path
 
     /**
      * @param bool $useEvenOddRule
-     * @return PageContentsInterface
+     * @return PageDescriptionInterface
      */
-    public function fill($useEvenOddRule = false): PageContentsInterface
+    public function fill($useEvenOddRule = false): PageDescriptionInterface
     {
         $this->data[] = 'f' . ($useEvenOddRule ? '*' : '');
         return $this;
@@ -124,9 +124,9 @@ trait Path
 
     /**
      * @param bool $useEvenOddRule
-     * @return PageContentsInterface
+     * @return PageDescriptionInterface
      */
-    public function fillAndStroke($useEvenOddRule = false): PageContentsInterface
+    public function fillAndStroke($useEvenOddRule = false): PageDescriptionInterface
     {
         $this->data[] = 'B' . ($useEvenOddRule ? '*' : '');
         return $this;
@@ -134,18 +134,18 @@ trait Path
 
     /**
      * @param bool $useEvenOddRule
-     * @return PageContentsInterface
+     * @return PageDescriptionInterface
      */
-    public function closeFillAndStroke($useEvenOddRule = false): PageContentsInterface
+    public function closeFillAndStroke($useEvenOddRule = false): PageDescriptionInterface
     {
         $this->data[] = 'b' . ($useEvenOddRule ? '*' : '');
         return $this;
     }
 
     /**
-     * @return PageContentsInterface
+     * @return PageDescriptionInterface
      */
-    public function endPath(): PageContentsInterface
+    public function endPath(): PageDescriptionInterface
     {
         $this->data[] = 'n';
         return $this;

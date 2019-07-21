@@ -3,9 +3,9 @@
 namespace pdf\Graphic\Operator;
 
 
-use pdf\Document\Page\PageContentsInterface;
+use pdf\Document\Page\PageDescriptionInterface;
 
 interface ExternalObjectInterface
 {
-    public function addXObject($name): PageContentsInterface;
+    public function addXObject($name): PageDescriptionInterface;
 }

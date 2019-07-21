@@ -14,7 +14,7 @@ use pdf\Graphic\Text;
 use pdf\ObjectType\Stream\StreamObject;
 use pdf\ObjectType\Stream\StreamObjectHeader;
 
-class ContentStream extends StreamObject implements PageContentsInterface
+class ContentStream extends StreamObject implements ContentStreamInterface
 {
     use Path, Text, Color,
         GeneralGraphicsState, SpecialGraphicsState,

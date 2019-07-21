@@ -3,19 +3,19 @@
 namespace pdf\Graphic\Operator\Path;
 
 
-use pdf\Document\Page\PageContentsInterface;
+use pdf\Document\Page\PageDescriptionInterface;
 
 interface PathPaintingInterface
 {
-    public function stroke(): PageContentsInterface;
+    public function stroke(): PageDescriptionInterface;
 
-    public function closeAndStroke(): PageContentsInterface;
+    public function closeAndStroke(): PageDescriptionInterface;
 
-    public function fill($useEvenOddRule = false): PageContentsInterface;
+    public function fill($useEvenOddRule = false): PageDescriptionInterface;
 
-    public function fillAndStroke($useEvenOddRule = false): PageContentsInterface;
+    public function fillAndStroke($useEvenOddRule = false): PageDescriptionInterface;
 
-    public function closeFillAndStroke($useEvenOddRule = false): PageContentsInterface;
+    public function closeFillAndStroke($useEvenOddRule = false): PageDescriptionInterface;
 
-    public function endPath(): PageContentsInterface;
+    public function endPath(): PageDescriptionInterface;
 }

@@ -3,16 +3,16 @@
 namespace pdf\Graphic\Operator;
 
 
-use pdf\Document\Page\PageContentsInterface;
+use pdf\Document\Page\PageDescriptionInterface;
 use pdf\ObjectType\NameObject;
 
 trait ShadingObject
 {
     /**
      * @param string|NameObject $name
-     * @return PageContentsInterface
+     * @return PageDescriptionInterface
      */
-    public function addShadingObject($name): PageContentsInterface
+    public function addShadingObject($name): PageDescriptionInterface
     {
         $this->data[] = $name . ' sh';
         return $this;
