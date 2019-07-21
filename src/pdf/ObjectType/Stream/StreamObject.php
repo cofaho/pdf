@@ -26,7 +26,7 @@ class StreamObject implements PdfObject
      */
     protected $header;
     /**
-     * @var string
+     * @var mixed
      */
     protected $data;
 
@@ -45,17 +45,17 @@ class StreamObject implements PdfObject
     public function __toString(): string
     {
         $filters = $this->header->getFilters();
+        $data = is_array($this->data) ? implode("\n", $this->data) : (string)$this->data;
+
         if (!empty($filters)) {
-            $this->header->DL = mb_strlen($this->data, '8bit');
-        }
-        if (is_array($this->data)) {
-            $this->data = implode("\n", $this->data);
+            $this->header->DL = mb_strlen($data, '8bit');
         }
         foreach ($filters as $filter) {
-            $this->data = Filter::encode($filter['name'], $this->data, $filter['params']);
+            $data = Filter::encode($filter['name'], $data, $filter['params']);
         }
-        $this->header->Length = mb_strlen($this->data, '8bit');
-        return $this->header . "\nstream\n" . $this->data ."\nendstream";
+        $this->header->Length = mb_strlen($data, '8bit');
+
+        return $this->header . "\nstream\n" . $data ."\nendstream";
     }
 
     public function __get(string $name)
@@ -83,7 +83,6 @@ class StreamObject implements PdfObject
         } elseif (isset($this->header->$name)) {
             $this->header->__unset($name);
         }
-
     }
 
     /**
