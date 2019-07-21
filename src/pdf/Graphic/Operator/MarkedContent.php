@@ -13,7 +13,7 @@ trait MarkedContent
      */
     public function markPoint($tag)
     {
-        $this->operators[] = $tag . ' MP';
+        $this->data[] = $tag . ' MP';
         return $this;
     }
 
@@ -24,7 +24,7 @@ trait MarkedContent
      */
     public function markProperties($tag, $properties)
     {
-        $this->operators[] = $tag . ' ' . $properties . ' DP';
+        $this->data[] = $tag . ' ' . $properties . ' DP';
         return $this;
     }
 
@@ -34,7 +34,7 @@ trait MarkedContent
      */
     public function beginMarkedContent($tag)
     {
-        $this->operators[] = $tag . ' BMC';
+        $this->data[] = $tag . ' BMC';
         return $this;
     }
 
@@ -45,7 +45,7 @@ trait MarkedContent
      */
     public function beginProperties($tag, $properties)
     {
-        $this->operators[] = $tag . ' ' . $properties . ' BDC';
+        $this->data[] = $tag . ' ' . $properties . ' BDC';
         return $this;
     }
 
@@ -54,7 +54,7 @@ trait MarkedContent
      */
     public function endMarkedContent()
     {
-        $this->operators[] = 'EMC';
+        $this->data[] = 'EMC';
         return $this;
     }
 }

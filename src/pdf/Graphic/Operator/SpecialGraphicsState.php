@@ -13,7 +13,7 @@ trait SpecialGraphicsState
      */
     public function saveState(): PageContentsInterface
     {
-        $this->operators[] = 'q';
+        $this->data[] = 'q';
         return $this;
     }
 
@@ -22,7 +22,7 @@ trait SpecialGraphicsState
      */
     public function restoreState(): PageContentsInterface
     {
-        $this->operators[] = 'Q';
+        $this->data[] = 'Q';
         return $this;
     }
 
@@ -32,7 +32,7 @@ trait SpecialGraphicsState
      */
     public function concatCurrentTransformationMatrix(Matrix $matrix): PageContentsInterface
     {
-        $this->operators[] = $matrix . ' cm';
+        $this->data[] = $matrix . ' cm';
         return $this;
     }
 }

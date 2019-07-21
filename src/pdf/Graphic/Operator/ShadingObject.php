@@ -14,7 +14,7 @@ trait ShadingObject
      */
     public function addShadingObject($name): PageContentsInterface
     {
-        $this->operators[] = $name . ' sh';
+        $this->data[] = $name . ' sh';
         return $this;
     }
 }

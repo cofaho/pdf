@@ -13,7 +13,7 @@ trait ExternalObject
      */
     public function addXObject($name): PageContentsInterface
     {
-        $this->operators[] = $name . ' Do';
+        $this->data[] = $name . ' Do';
         return $this;
     }
 }

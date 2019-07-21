@@ -18,7 +18,7 @@ trait Text
      */
     public function beginText(): TextInterface
     {
-        $this->operators[] = 'BT';
+        $this->data[] = 'BT';
         return $this;
     }
 
@@ -27,7 +27,7 @@ trait Text
      */
     public function endText(): PageContentsInterface
     {
-        $this->operators[] = 'ET';
+        $this->data[] = 'ET';
         return $this;
     }
 
@@ -37,7 +37,7 @@ trait Text
      */
     public function setCharacterSpacing(float $charSpace)
     {
-        $this->operators[] = Math::floatToStr($charSpace) . ' Tc';
+        $this->data[] = Math::floatToStr($charSpace) . ' Tc';
         return $this;
     }
 
@@ -47,7 +47,7 @@ trait Text
      */
     public function setWordSpacing(float $wordSpace)
     {
-        $this->operators[] = Math::floatToStr($wordSpace) . ' Tw';
+        $this->data[] = Math::floatToStr($wordSpace) . ' Tw';
         return $this;
     }
 
@@ -57,7 +57,7 @@ trait Text
      */
     public function setHorizontalScaling(float $scale)
     {
-        $this->operators[] = Math::floatToStr($scale) . ' Tz';
+        $this->data[] = Math::floatToStr($scale) . ' Tz';
         return $this;
     }
 
@@ -67,7 +67,7 @@ trait Text
      */
     public function setLeading($leading)
     {
-        $this->operators[] = $leading . ' TL';
+        $this->data[] = $leading . ' TL';
         return $this;
     }
 
@@ -78,7 +78,7 @@ trait Text
      */
     public function setFont($font, float $size)
     {
-        $this->operators[] = $font . ' ' . Math::floatToStr($size) . ' Tf';
+        $this->data[] = $font . ' ' . Math::floatToStr($size) . ' Tf';
         return $this;
     }
 
@@ -88,7 +88,7 @@ trait Text
      */
     public function setRenderingMode(int $render)
     {
-        $this->operators[] = $render . ' Tr';
+        $this->data[] = $render . ' Tr';
         return $this;
     }
 
@@ -98,7 +98,7 @@ trait Text
      */
     public function setRise(int $rise)
     {
-        $this->operators[] = $rise . ' Ts';
+        $this->data[] = $rise . ' Ts';
         return $this;
     }
 
@@ -109,7 +109,7 @@ trait Text
      */
     public function nextLine($tx, $ty): TextInterface
     {
-        $this->operators[] = $tx . ' ' . $ty . ' Td';
+        $this->data[] = $tx . ' ' . $ty . ' Td';
         return $this;
     }
 
@@ -120,7 +120,7 @@ trait Text
      */
     public function nextLineSetLeading($tx, $ty): TextInterface
     {
-        $this->operators[] = $tx . ' ' . $ty . ' TD';
+        $this->data[] = $tx . ' ' . $ty . ' TD';
         return $this;
     }
 
@@ -130,7 +130,7 @@ trait Text
      */
     public function setMatrix(Matrix $matrix): TextInterface
     {
-        $this->operators[] = $matrix . ' Tm';
+        $this->data[] = $matrix . ' Tm';
         return $this;
     }
 
@@ -139,7 +139,7 @@ trait Text
      */
     public function nextLineStart(): TextInterface
     {
-        $this->operators[] = 'T*';
+        $this->data[] = 'T*';
         return $this;
     }
 
@@ -150,7 +150,7 @@ trait Text
     public function addText(string $text): TextInterface
     {
         $oText = new StringObject($text);
-        $this->operators[] = $oText . ' Tj';
+        $this->data[] = $oText . ' Tj';
         return $this;
     }
 
@@ -160,7 +160,7 @@ trait Text
      */
     public function addTextOnNextLine(StringObject $text): TextInterface
     {
-        $this->operators[] = $text . " '";
+        $this->data[] = $text . " '";
         return $this;
     }
 
@@ -172,7 +172,7 @@ trait Text
      */
     public function addTextOnNextLineWithSpacings($aw, $ac, StringObject $text): TextInterface
     {
-        $this->operators[] = "$aw $ac $text \"";
+        $this->data[] = "$aw $ac $text \"";
         return $this;
     }
 
@@ -182,7 +182,7 @@ trait Text
      */
     public function addTexts(ArrayObject $texts): TextInterface
     {
-        $this->operators[] = $texts . ' TJ';
+        $this->data[] = $texts . ' TJ';
         return $this;
     }
 }

@@ -20,7 +20,7 @@ trait Path
     {
         $x = Math::floatToStr($x);
         $y = Math::floatToStr($y);
-        $this->operators[] = "$x $y m";
+        $this->data[] = "$x $y m";
         return $this;
     }
 
@@ -37,7 +37,7 @@ trait Path
         $y = Math::floatToStr($y);
         $width = Math::floatToStr($width);
         $height = Math::floatToStr($height);
-        $this->operators[] = "$x $y $width $height re";
+        $this->data[] = "$x $y $width $height re";
         return $this;
     }
 
@@ -50,7 +50,7 @@ trait Path
     {
         $x = Math::floatToStr($x);
         $y = Math::floatToStr($y);
-        $this->operators[] = "$x $y l";
+        $this->data[] = "$x $y l";
         return $this;
     }
 
@@ -66,11 +66,11 @@ trait Path
             if ($p2 === null) {
                 $this->lineTo($p3->x, $p3->y);
             }
-            $this->operators[] = $p2 . ' ' . $p3 . ' v';
+            $this->data[] = $p2 . ' ' . $p3 . ' v';
         } elseif ($p2 === null) {
-            $this->operators[] = $p1 . ' ' . $p3 . ' y';
+            $this->data[] = $p1 . ' ' . $p3 . ' y';
         } else {
-            $this->operators[] = $p1 . ' ' . $p2 . ' ' . $p3 . ' c';
+            $this->data[] = $p1 . ' ' . $p2 . ' ' . $p3 . ' c';
         }
         return $this;
     }
@@ -80,7 +80,7 @@ trait Path
      */
     public function closePath(): PathInterface
     {
-        $this->operators[] = 'h';
+        $this->data[] = 'h';
         return $this;
     }
 
@@ -90,7 +90,7 @@ trait Path
      */
     public function clip($useEvenOddRule = false): PathPaintingInterface
     {
-        $this->operators[] = 'W' . ($useEvenOddRule ? '*' : '');
+        $this->data[] = 'W' . ($useEvenOddRule ? '*' : '');
         return $this;
     }
 
@@ -99,7 +99,7 @@ trait Path
      */
     public function stroke(): PageContentsInterface
     {
-        $this->operators[] = 'S';
+        $this->data[] = 'S';
         return $this;
     }
 
@@ -108,7 +108,7 @@ trait Path
      */
     public function closeAndStroke(): PageContentsInterface
     {
-        $this->operators[] = 's';
+        $this->data[] = 's';
         return $this;
     }
 
@@ -118,7 +118,7 @@ trait Path
      */
     public function fill($useEvenOddRule = false): PageContentsInterface
     {
-        $this->operators[] = 'f' . ($useEvenOddRule ? '*' : '');
+        $this->data[] = 'f' . ($useEvenOddRule ? '*' : '');
         return $this;
     }
 
@@ -128,7 +128,7 @@ trait Path
      */
     public function fillAndStroke($useEvenOddRule = false): PageContentsInterface
     {
-        $this->operators[] = 'B' . ($useEvenOddRule ? '*' : '');
+        $this->data[] = 'B' . ($useEvenOddRule ? '*' : '');
         return $this;
     }
 
@@ -138,7 +138,7 @@ trait Path
      */
     public function closeFillAndStroke($useEvenOddRule = false): PageContentsInterface
     {
-        $this->operators[] = 'b' . ($useEvenOddRule ? '*' : '');
+        $this->data[] = 'b' . ($useEvenOddRule ? '*' : '');
         return $this;
     }
 
@@ -147,7 +147,7 @@ trait Path
      */
     public function endPath(): PageContentsInterface
     {
-        $this->operators[] = 'n';
+        $this->data[] = 'n';
         return $this;
     }
 }

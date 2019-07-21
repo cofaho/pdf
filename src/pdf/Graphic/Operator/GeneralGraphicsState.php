@@ -16,7 +16,7 @@ trait GeneralGraphicsState
      */
     public function setLineWidth(float $width)
     {
-        $this->operators[] = Math::floatToStr($width) . ' w';
+        $this->data[] = Math::floatToStr($width) . ' w';
         return $this;
     }
 
@@ -26,7 +26,7 @@ trait GeneralGraphicsState
      */
     public function setLineCap(int $style)
     {
-        $this->operators[] = $style . ' J';
+        $this->data[] = $style . ' J';
         return $this;
     }
 
@@ -36,7 +36,7 @@ trait GeneralGraphicsState
      */
     public function setLineJoin(int $style)
     {
-        $this->operators[] = $style . ' j';
+        $this->data[] = $style . ' j';
         return $this;
     }
 
@@ -46,7 +46,7 @@ trait GeneralGraphicsState
      */
     public function setMiterLimit(float $limit)
     {
-        $this->operators[] = Math::floatToStr($limit) . ' M';
+        $this->data[] = Math::floatToStr($limit) . ' M';
         return $this;
     }
 
@@ -57,7 +57,7 @@ trait GeneralGraphicsState
      */
     public function setDashPattern(ArrayObject $dashArray, int $dashPhase)
     {
-        $this->operators[] = $dashArray . ' ' . $dashPhase . ' d';
+        $this->data[] = $dashArray . ' ' . $dashPhase . ' d';
         return $this;
     }
 
@@ -67,7 +67,7 @@ trait GeneralGraphicsState
      */
     public function setColorIntent(string $intent)
     {
-        $this->operators[] = $intent . ' ri';
+        $this->data[] = $intent . ' ri';
         return $this;
     }
 
@@ -80,7 +80,7 @@ trait GeneralGraphicsState
         if ($tolerance < 0 || $tolerance > 100) {
             throw new InvalidArgumentException('Tolerance should be in the range [0, 100]');
         }
-        $this->operators[] = $tolerance . ' i';
+        $this->data[] = $tolerance . ' i';
         return $this;
     }
 
@@ -90,7 +90,7 @@ trait GeneralGraphicsState
      */
     public function setGraphicsState($name)
     {
-        $this->operators[] = $name . ' gs';
+        $this->data[] = $name . ' gs';
         return $this;
     }
 

@@ -218,11 +218,24 @@ class PDF
         return $this;
     }
 
-    public function writePageContent(string $content): PDF
+    /**
+     * @param PdfObject $object
+     * @return PDF
+     */
+    public function writePageObject(PdfObject $object): PDF
     {
-        $stream = new StreamObject();
-        $stream->setData($content);
-        $this->writeIndirectPageObject($this->createIndirectObject($stream));
+        if ($object instanceof IndirectObject) {
+            $this->writeIndirectPageObject($object);
+        } elseif ($object instanceof StreamObject) {
+            $this->writeIndirectPageObject($this->createIndirectObject($object));
+        } else {
+            $data = (string)$object;
+            if (!empty($data)) {
+                $stream = new StreamObject();
+                $stream->setData($data);
+                $this->writeIndirectPageObject($this->createIndirectObject($stream));
+            }
+        }
         return $this;
     }
 

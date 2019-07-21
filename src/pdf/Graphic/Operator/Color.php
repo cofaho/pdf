@@ -15,7 +15,7 @@ trait Color
      */
     public function setColorSpaceForStroking($name)
     {
-        $this->operators[] = $name . ' CS';
+        $this->data[] = $name . ' CS';
         return $this;
     }
 
@@ -25,7 +25,7 @@ trait Color
      */
     public function setColorSpaceForNonStroking($name)
     {
-        $this->operators[] = $name . ' cs';
+        $this->data[] = $name . ' cs';
         return $this;
     }
 
@@ -35,7 +35,7 @@ trait Color
      */
     public function setStrokeColor(array $color)
     {
-        $this->operators[] = $color . ' SC';
+        $this->data[] = $color . ' SC';
         return $this;
     }
 
@@ -46,7 +46,7 @@ trait Color
      */
     public function setStrokeColorN(array $color, $name = null)
     {
-        $this->operators[] = implode(' ', $color) . ($name === null ? '' : ' ' . $name) . ' SCN';
+        $this->data[] = implode(' ', $color) . ($name === null ? '' : ' ' . $name) . ' SCN';
         return $this;
     }
 
@@ -56,7 +56,7 @@ trait Color
      */
     public function setFillColor(array $color)
     {
-        $this->operators[] = implode(' ', $color) . ' sc';
+        $this->data[] = implode(' ', $color) . ' sc';
         return $this;
     }
 
@@ -67,7 +67,7 @@ trait Color
      */
     public function setFillColorN(array $color, $name = null)
     {
-        $this->operators[] = implode(' ', $color) . ($name === null ? '' : ' ' . $name) . ' scn';
+        $this->data[] = implode(' ', $color) . ($name === null ? '' : ' ' . $name) . ' scn';
         return $this;
     }
 
@@ -80,7 +80,7 @@ trait Color
         if ($gray < 0 || $gray > 1) {
             throw new InvalidArgumentException('Gray should be in the range [0.0, 1.0]');
         }
-        $this->operators[] = Math::floatToStr($gray) . ' G';
+        $this->data[] = Math::floatToStr($gray) . ' G';
         return $this;
     }
 
@@ -93,7 +93,7 @@ trait Color
         if ($gray < 0 || $gray > 1) {
             throw new InvalidArgumentException('Gray should be in the range [0.0, 1.0]');
         }
-        $this->operators[] = Math::floatToStr($gray) . ' g';
+        $this->data[] = Math::floatToStr($gray) . ' g';
         return $this;
     }
 
@@ -109,7 +109,7 @@ trait Color
                 throw new InvalidArgumentException('RGB operands should be in the range [0.0, 1.0]');
             }
         }
-        $this->operators[] = $rgb . ' RG';
+        $this->data[] = $rgb . ' RG';
         return $this;
     }
 
@@ -126,7 +126,7 @@ trait Color
             }
             $c = Math::floatToStr($c);
         }
-        $this->operators[] = implode(' ', $rgb) . ' rg';
+        $this->data[] = implode(' ', $rgb) . ' rg';
         return $this;
     }
 
@@ -143,7 +143,7 @@ trait Color
             }
             $c = Math::floatToStr($c);
         }
-        $this->operators[] = implode(' ', $cmyk) . ' K';
+        $this->data[] = implode(' ', $cmyk) . ' K';
         return $this;
     }
 
@@ -160,7 +160,7 @@ trait Color
             }
             $c = Math::floatToStr($c);
         }
-        $this->operators[] = implode(' ', $cmyk) . ' k';
+        $this->data[] = implode(' ', $cmyk) . ' k';
         return $this;
     }
 
