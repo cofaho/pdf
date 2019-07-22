@@ -24,8 +24,21 @@ class PageContents implements PageDescriptionInterface, PathInterface, TextInter
      */
     protected $data = [];
 
-    public function __toString()
+    /**
+     * @return string
+     */
+    public function __toString(): string
     {
         return implode("\n", $this->data);
+    }
+
+    /**
+     * @param PageContents $contents
+     * @return PageContents
+     */
+    public function append(PageContents $contents): PageContents
+    {
+        $this->data = array_merge($this->data, $contents->data);
+        return $this;
     }
 }
