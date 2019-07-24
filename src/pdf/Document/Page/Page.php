@@ -10,7 +10,6 @@ use pdf\ObjectType\ByteStringObject;
 use pdf\ObjectType\DictionaryObject;
 use pdf\ObjectType\NameObject;
 use pdf\ObjectType\ObjectReference;
-use pdf\ObjectType\Stream\ContentStream;
 use pdf\ObjectType\Stream\StreamObject;
 
 /**

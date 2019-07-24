@@ -6,6 +6,7 @@ namespace pdf\Document\Page;
 use pdf\DataStructure\Rectangle;
 use pdf\ObjectType\ArrayObject;
 use pdf\ObjectType\DictionaryObject;
+use pdf\ObjectType\IndirectObject;
 use pdf\ObjectType\NameObject;
 use pdf\ObjectType\ObjectReference;
 
@@ -29,5 +30,14 @@ class Pages extends DictionaryObject
         if (!isset($config['Count'])) {
             $this->Count = 0;
         }
+    }
+
+    /**
+     * @param IndirectObject $page
+     */
+    public function addKid(IndirectObject $page)
+    {
+        $this->Kids[] = $page->getReference();
+        $this->Count++;
     }
 }

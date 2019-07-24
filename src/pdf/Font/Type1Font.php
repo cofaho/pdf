@@ -10,7 +10,6 @@ use pdf\ObjectType\ObjectReference;
 use pdf\ObjectType\Stream\StreamObject;
 
 /**
- * @property NameObject Name deprecated
  * @property NameObject BaseFont
  * @property integer FirstChar
  * @property integer LastChar

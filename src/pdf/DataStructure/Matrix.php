@@ -39,7 +39,7 @@ class Matrix
         }
     }
 
-    public static function identity(int $size)
+    public static function identity(int $size = 3)
     {
         $values = [];
         for($i = 0; $i < $size; ++$i) {

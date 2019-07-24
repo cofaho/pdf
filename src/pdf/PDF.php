@@ -12,7 +12,6 @@ use pdf\Document\Page\Page;
 use pdf\Document\Page\Pages;
 use pdf\Document\Trailer;
 use pdf\Font\Font;
-use pdf\ObjectType\DictionaryObject;
 use pdf\ObjectType\IndirectObject;
 use pdf\ObjectType\PdfObject;
 use pdf\ObjectType\Stream\StreamObject;
@@ -81,6 +80,7 @@ class PDF
     /**
      * PDF constructor.
      * @param WriterInterface $writer
+     * @throws Exception
      */
     public function __construct(WriterInterface $writer)
     {
@@ -100,12 +100,13 @@ class PDF
         $catalog->Pages = $this->ioPages->getReference();
 
         $this->resources = new ResourceDictionary();
-        $this->resources->Font = new DictionaryObject();
         $this->ioResources = self::addIndirectObject($this->resources);
 
         $this->trailer = new Trailer([
             'Root' => $ioCatalog->getReference()
         ]);
+
+        $this->setFont(Font::FONT_HELVETICA);
     }
 
 
@@ -128,19 +129,20 @@ class PDF
     public function addPages(): Pages
     {
         $pages = new Pages();
-        $this->pages->Kids[] = $this->addIndirectObject($pages);
+        $ioPages = $this->addIndirectObject($pages);
+        $this->pages->addKid($ioPages);
 
         return $pages;
     }
 
     /**
-     * @param null $format
+     * @param Pages|null $pages
+     * @param array|null $format
      * @param int $orientation
-     * @param null $userUnit
+     * @param string|null $userUnit
      * @return PDF
-     * @throws Exception
      */
-    public function addPage($format = null, $orientation = 0, $userUnit = null): PDF
+    public function addPage(Pages $pages = null, $format = null, $orientation = 0, $userUnit = null): PDF
     {
         if ($this->ioCurrentPage) {
             $this->writeIndirectObject($this->ioCurrentPage);
@@ -161,11 +163,9 @@ class PDF
         }
 
         $this->ioCurrentPage = $this->createIndirectObject($page);
-        $this->pages->Kids[] = $this->ioCurrentPage->getReference();
-        $this->pages->Count++;
+        $pages = $pages ?? $this->pages;
+        $pages->addKid($this->ioCurrentPage);
         $this->currentPage = $page;
-
-        $this->setFont(Font::FONT_HELVETICA);
 
         return $this;
     }
@@ -273,7 +273,6 @@ class PDF
     public function setFont($fontName): PDF
     {
         if (!isset($this->fontIndex[$fontName])) {
-            $fontKey = 'F' . (++$this->fontID);
 
             if (!Font::hasFont($fontName)) {
                 Font::addFont($fontName);
@@ -281,9 +280,9 @@ class PDF
 
             $font = $this->createIndirectObject(Font::getFont($fontName));
             $this->writeIndirectObject($font);
-            $this->resources->Font->$fontKey = $font->getReference();
+            $fontID = $this->resources->addFont($font);
 
-            $this->fontIndex[$fontName] = $fontKey;
+            $this->fontIndex[$fontName] = $fontID;
         }
 
         $this->currentFont = $this->fontIndex[$fontName];
