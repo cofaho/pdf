@@ -155,24 +155,26 @@ trait Text
     }
 
     /**
-     * @param StringObject $text
+     * @param string $text
      * @return TextInterface
      */
-    public function addTextOnNextLine(StringObject $text): TextInterface
+    public function addTextOnNextLine(string $text): TextInterface
     {
-        $this->data[] = $text . " '";
+        $oText = new StringObject($text);
+        $this->data[] = $oText . " '";
         return $this;
     }
 
     /**
      * @param float $aw Word spacing
      * @param float $ac Character spacing
-     * @param StringObject $text
+     * @param string $text
      * @return TextInterface
      */
-    public function addTextOnNextLineWithSpacings($aw, $ac, StringObject $text): TextInterface
+    public function addTextOnNextLineWithSpacings($aw, $ac, string $text): TextInterface
     {
-        $this->data[] = "$aw $ac $text \"";
+        $oText = new StringObject($text);
+        $this->data[] = "$aw $ac $oText \"";
         return $this;
     }
 
