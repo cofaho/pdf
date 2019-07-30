@@ -30,12 +30,12 @@ class PDF
     /**
      * @var Pages
      */
-    protected $pages;
+    protected $rootPages;
     /**
      * Pages Indirect Object
      * @var IndirectObject
      */
-    protected $ioPages;
+    protected $ioRootPages;
     /**
      * @var Trailer
      */
@@ -95,9 +95,9 @@ class PDF
         $catalog->Version = '/1.7';
         $ioCatalog = self::addIndirectObject($catalog);
 
-        $this->pages = new Pages();
-        $this->ioPages = self::addIndirectObject($this->pages);
-        $catalog->Pages = $this->ioPages->getReference();
+        $this->rootPages = new Pages();
+        $this->ioRootPages = self::addIndirectObject($this->rootPages);
+        $catalog->Pages = $this->ioRootPages->getReference();
 
         $this->resources = new ResourceDictionary();
         $this->ioResources = self::addIndirectObject($this->resources);
@@ -126,29 +126,39 @@ class PDF
         $this->writer->write((string)$this->trailer);
     }
 
-    public function addPages(): Pages
+    /**
+     * @param IndirectObject|null $parent
+     * @return IndirectObject
+     */
+    public function addPages(IndirectObject $parent = null): IndirectObject
     {
-        $pages = new Pages();
-        $ioPages = $this->addIndirectObject($pages);
-        $this->pages->addKid($ioPages);
+        $parent = $parent ?? $this->ioRootPages;
 
-        return $pages;
+        $pages = new Pages();
+        $pages->Parent = $parent->getReference();
+        $ioPages = $this->addIndirectObject($pages);
+        $this->rootPages->addKid($ioPages);
+
+        return $ioPages;
     }
 
     /**
-     * @param Pages|null $pages
+     * @param IndirectObject|null $ioPages
      * @param array|null $format
      * @param float|null $userUnit
      * @return PDF
      */
-    public function addPage(Pages $pages = null, $format = null, $userUnit = null): PDF
+    public function addPage(IndirectObject $ioPages = null, $format = null, $userUnit = null): PDF
     {
         if ($this->ioCurrentPage) {
             $this->writeIndirectObject($this->ioCurrentPage);
         }
 
+        $ioPages = $ioPages ?? $this->ioRootPages;
+        $pages = $ioPages->getObject();
+
         $page = new Page();
-        $page->Parent = $this->ioPages->getReference();
+        $page->Parent = $ioPages->getReference();
         $page->Resources = $this->ioResources->getReference();
 
         if ($userUnit !== null) {
@@ -160,7 +170,6 @@ class PDF
         }
 
         $this->ioCurrentPage = $this->createIndirectObject($page);
-        $pages = $pages ?? $this->pages;
         $pages->addKid($this->ioCurrentPage);
         $this->currentPage = $page;
 
