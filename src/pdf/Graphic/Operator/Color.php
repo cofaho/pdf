@@ -109,7 +109,7 @@ trait Color
                 throw new InvalidArgumentException('RGB operands should be in the range [0.0, 1.0]');
             }
         }
-        $this->data[] = $rgb . ' RG';
+        $this->data[] = implode(' ', $rgb) . ' RG';
         return $this;
     }
 
