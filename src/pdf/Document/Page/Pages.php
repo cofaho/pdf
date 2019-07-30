@@ -22,6 +22,11 @@ use pdf\ObjectType\ObjectReference;
  */
 class Pages extends DictionaryObject
 {
+    /**
+     * @var Pages
+     */
+    protected $parent;
+
     public function __construct(?array $config = null)
     {
         parent::__construct($config);
@@ -38,6 +43,18 @@ class Pages extends DictionaryObject
     public function addKid(IndirectObject $page)
     {
         $this->Kids[] = $page->getReference();
-        $this->Count++;
+        if ($page->getObject() instanceof Pages) {
+            $page->getObject()->parent = $this;
+        } elseif ($page->getObject() instanceof Page) {
+            $this->incCount();
+        }
+    }
+
+    protected function incCount()
+    {
+        ++$this->Count;
+        if ($this->parent) {
+            $this->parent->incCount();
+        }
     }
 }
