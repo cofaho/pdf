@@ -138,11 +138,10 @@ class PDF
     /**
      * @param Pages|null $pages
      * @param array|null $format
-     * @param int $orientation
-     * @param string|null $userUnit
+     * @param float|null $userUnit
      * @return PDF
      */
-    public function addPage(Pages $pages = null, $format = null, $orientation = 0, $userUnit = null): PDF
+    public function addPage(Pages $pages = null, $format = null, $userUnit = null): PDF
     {
         if ($this->ioCurrentPage) {
             $this->writeIndirectObject($this->ioCurrentPage);
@@ -157,9 +156,7 @@ class PDF
         }
 
         if ($format !== null) {
-            $w = $format[$orientation];
-            $h = $format[1 - $orientation];
-            $page->MediaBox = new Rectangle([0, 0, $w, $h]);
+            $page->MediaBox = new Rectangle([0, 0, $format[0], $format[1]]);
         }
 
         $this->ioCurrentPage = $this->createIndirectObject($page);
