@@ -29,7 +29,7 @@ interface TextStateInterface
      * @param $leading
      * @return $this
      */
-    public function setLeading($leading);
+    public function setLineHeight($leading);
     /**
      * @param string|NameObject $font
      * @param float $size
