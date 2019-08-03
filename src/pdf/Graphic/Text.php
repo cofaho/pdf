@@ -65,7 +65,7 @@ trait Text
      * @param $leading
      * @return $this
      */
-    public function setLeading($leading)
+    public function setLineHeight($leading)
     {
         $this->data[] = $leading . ' TL';
         return $this;
