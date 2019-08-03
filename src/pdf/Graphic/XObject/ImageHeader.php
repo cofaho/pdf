@@ -30,5 +30,9 @@ use pdf\ObjectType\Stream\StreamObject;
  */
 class ImageHeader extends XObjectHeader
 {
-
+    public function __construct(?array $config = null)
+    {
+        parent::__construct($config);
+        $this->Subtype = '/Image';
+    }
 }
