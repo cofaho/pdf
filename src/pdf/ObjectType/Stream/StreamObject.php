@@ -3,22 +3,9 @@
 namespace pdf\ObjectType\Stream;
 
 
-use pdf\ObjectType\ArrayObject;
-use pdf\ObjectType\DictionaryObject;
-use pdf\ObjectType\NameObject;
 use pdf\ObjectType\Stream\Filter\Filter;
 use pdf\ObjectType\PdfObject;
 
-/**
- * @property mixed data
- * @property integer Length
- * @property NameObject|ArrayObject Filter
- * @property DictionaryObject|ArrayObject DecodeParms
- * @property DictionaryObject|ArrayObject F
- * @property NameObject|ArrayObject FFilter
- * @property DictionaryObject|ArrayObject FDecodeParms
- * @property integer DL
- */
 class StreamObject implements PdfObject
 {
     /**
@@ -83,6 +70,14 @@ class StreamObject implements PdfObject
         } elseif (isset($this->header->$name)) {
             $this->header->__unset($name);
         }
+    }
+
+    /**
+     * @return StreamObjectHeader
+     */
+    public function getHeader()
+    {
+        return $this->header;
     }
 
     /**

@@ -6,16 +6,11 @@ namespace pdf\Document;
 use InvalidArgumentException;
 use pdf\Document\Encryption\EncryptionDictionary;
 use pdf\ObjectType\IndirectObject;
-use pdf\ObjectType\NameObject;
-use pdf\ObjectType\ObjectReference;
 use pdf\ObjectType\Stream\StreamObject;
 
 /**
  * @property ObjectStreamHeader $header
- * @property-read NameObject Type
- * @property integer N
- * @property integer First
- * @property ObjectReference|StreamObject Extends
+ * @method ObjectStreamHeader getHeader()
  */
 class ObjectStream extends StreamObject
 {

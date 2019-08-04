@@ -3,17 +3,11 @@
 namespace pdf\Document;
 
 
-use pdf\ObjectType\ArrayObject;
-use pdf\ObjectType\NameObject;
 use pdf\ObjectType\Stream\StreamObject;
 
 /**
- * @property-read NameObject Type
- * @property integer Size
- * @property ArrayObject Index
- * @property integer Prev
- * @property ArrayObject W
  * @property CrossReferenceStreamHeader $header
+ * @method CrossReferenceStreamHeader getHeader()
  */
 class CrossReferenceStream extends StreamObject
 {

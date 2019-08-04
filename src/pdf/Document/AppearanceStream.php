@@ -5,6 +5,10 @@ namespace pdf\Document;
 
 use pdf\ObjectType\Stream\StreamObject;
 
+/**
+ * @property AppearanceStreamHeader $header
+ * @method AppearanceStreamHeader getHeader()
+ */
 class AppearanceStream extends StreamObject
 {
     public function __construct()
