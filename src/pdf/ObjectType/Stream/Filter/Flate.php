@@ -8,11 +8,11 @@ class Flate extends AbstractFilter
 
     public static function encode($data, $params = null)
     {
-        return gzuncompress($data);
+        return gzcompress($data);
     }
 
     public static function decode($data, $params = null)
     {
-        return gzcompress($data);
+        return gzuncompress($data);
     }
 }
