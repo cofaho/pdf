@@ -16,6 +16,10 @@ class StreamObject implements PdfObject
      * @var mixed
      */
     protected $data;
+    /**
+     * @var bool
+     */
+    protected $applyFilters = true;
 
     /**
      * StreamObject constructor.
@@ -34,11 +38,11 @@ class StreamObject implements PdfObject
         $filters = $this->header->getFilters();
         $data = is_array($this->data) ? implode("\n", $this->data) : (string)$this->data;
 
-        if (!empty($filters)) {
+        if ($this->applyFilters && !empty($filters)) {
             $this->header->DL = mb_strlen($data, '8bit');
-        }
-        foreach ($filters as $filter) {
-            $data = Filter::encode($filter['name'], $data, $filter['params']);
+            foreach ($filters as $filter) {
+                $data = Filter::encode($filter['name'], $data, $filter['params']);
+            }
         }
         $this->header->Length = mb_strlen($data, '8bit');
 
@@ -105,6 +109,24 @@ class StreamObject implements PdfObject
     public function addFilter(string $filterName)
     {
         $this->header->addFilter($filterName);
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isApplyFilters(): bool
+    {
+        return $this->applyFilters;
+    }
+
+    /**
+     * @param bool $applyFilters
+     * @return $this
+     */
+    public function setApplyFilters(bool $applyFilters)
+    {
+        $this->applyFilters = $applyFilters;
         return $this;
     }
 
