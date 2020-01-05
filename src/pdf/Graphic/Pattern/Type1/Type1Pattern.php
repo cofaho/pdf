@@ -1,6 +1,6 @@
 <?php
 
-namespace lib\Pattern\Type1;
+namespace pdf\Graphic\Pattern\Type1;
 
 
 use pdf\ObjectType\Stream\StreamObject;

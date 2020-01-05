@@ -105,6 +105,7 @@ class PDF
         $this->trailer = new Trailer([
             'Root' => $ioCatalog->getReference()
         ]);
+        $this->trailer->ID = time();
 
         $this->setFont(Font::FONT_HELVETICA);
     }
@@ -271,6 +272,12 @@ class PDF
         return $this;
     }
 
+    public function addResource(IndirectObject $object): PDF
+    {
+        $this->resources->addIndirectObject($object);
+        return $this;
+    }
+
     /**
      * @param string $fontName
      * @return PDF
@@ -286,7 +293,7 @@ class PDF
 
             $font = $this->createIndirectObject(Font::getFont($fontName));
             $this->writeIndirectObject($font);
-            $fontID = $this->resources->addFont($font);
+            $fontID = $this->resources->addIndirectObject($font);
 
             $this->fontIndex[$fontName] = $fontID;
         }
