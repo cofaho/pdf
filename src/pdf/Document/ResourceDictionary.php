@@ -31,7 +31,7 @@ class ResourceDictionary extends DictionaryObject
             throw new \InvalidArgumentException("Can't add object of type `$type` to ResourceDictionary");
         }
 
-        $name = $type . ++$this->dictionaries[$type];
+        $name = trim($object->Name ?? $type . ++$this->dictionaries[$type], '/');
         $this->$type->$name = $indirectObject->getReference();
 
         return $this;
