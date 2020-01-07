@@ -5,8 +5,15 @@
     "keywords": ["pdf"],
     "license": "MIT",
     "require": {
-        "phenx/php-font-lib": "^0.5.1"
+        "phenx/php-font-lib": "^0.5.1",
+        "kaitai-io/kaitai_struct_php_runtime": "dev-master"
     },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url":  "git@github.com:kaitai-io/kaitai_struct_php_runtime.git"
+        }
+    ],
     "autoload": {
         "psr-4": {
             "pdf\\": "src/pdf"
