@@ -3,7 +3,10 @@
 namespace pdf\Helper;
 
 
+use Kaitai\Struct\Stream;
 use pdf\Graphic\XObject\Image;
+use pdf\Helper\ImageParser\Png;
+use pdf\ObjectType\DictionaryObject;
 
 class ImageParser
 {
@@ -41,6 +44,9 @@ class ImageParser
             case IMAGETYPE_JPEG:
                 $this->parseJPEG();
                 break;
+            case IMAGETYPE_PNG:
+                $this->parsePNG();
+                break;
         }
     }
 
@@ -76,4 +82,55 @@ class ImageParser
         $this->image->setApplyFilters(false);
     }
 
+    protected function parsePNG()
+    {
+        $parsedImg = new Png(new Stream($this->file));
+        $imgHeader = $this->image->getHeader();
+        $data = [];
+        $icc = null;
+        /** @var Png\Chunk $chunk */
+        foreach ($parsedImg->chunks() as $chunk) {
+            switch ($chunk->type()) {
+                case 'IDAT':
+                    $data[] = $chunk->body();
+                    break;
+            }
+        }
+        $data = implode($data);
+        $this->image->setData($data);
+
+        /** @var Png\IhdrChunk $ihdr */
+        $ihdr = $parsedImg->ihdr();
+        $colors = 1;
+        switch ($ihdr->colorType()) {
+            case Png\ColorType::GREYSCALE_ALPHA:
+                //TODO: create soft mask
+            case Png\ColorType::GREYSCALE:
+                $imgHeader->ColorSpace = '/DeviceGray';
+                break;
+            case Png\ColorType::TRUECOLOR_ALPHA:
+                //TODO: create soft mask
+            case Png\ColorType::TRUECOLOR:
+                $imgHeader->ColorSpace = '/DeviceRGB';
+                $colors = 3;
+                break;
+            case Png\ColorType::INDEXED:
+                $imgHeader->ColorSpace = '/Indexed';
+                break;
+            default:
+                break;
+        }
+
+        $imgHeader->Filter = '/FlateDecode';
+        $this->image->setApplyFilters(false);
+        $imgHeader->BitsPerComponent = $ihdr->bitDepth();
+
+        $imgHeader->DecodeParms = new DictionaryObject([
+            'Predictor' => 15,
+            'Colors' => $colors,
+            'BitsPerComponent' => $imgHeader->BitsPerComponent,
+            'Columns' => $ihdr->width()
+        ]);
+
+    }
 }

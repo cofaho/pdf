@@ -15,19 +15,4 @@ class Image extends StreamObject
     {
         parent::__construct(new ImageHeader());
     }
-
-    public function __toString(): string
-    {
-        $name = null;
-        if ($this->getHeader()->Name) {
-            $name = $this->getHeader()->Name;
-            unset($this->getHeader()->Name);
-        }
-        $result = parent::__toString();
-        if ($name) {
-            $this->getHeader()->Name = $name;
-        }
-
-        return $result;
-    }
 }
