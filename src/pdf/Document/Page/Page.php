@@ -50,7 +50,7 @@ class Page extends DictionaryObject
     {
         parent::__construct($config);
         $this->Type = '/Page';
-        $this->Resources = new DictionaryObject($config['Resources']);
-        $this->Contents = new ArrayObject($config['Contents']);
+        $this->Resources = new DictionaryObject($config['Resources'] ?? null);
+        $this->Contents = new ArrayObject($config['Contents'] ?? null);
     }
 }
