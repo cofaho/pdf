@@ -31,7 +31,7 @@ class Pages extends DictionaryObject
     {
         parent::__construct($config);
         $this->Type = '/Pages';
-        $this->Kids = new ArrayObject($config['Kids']);
+        $this->Kids = new ArrayObject($config['Kids'] ?? null);
         if (!isset($config['Count'])) {
             $this->Count = 0;
         }
