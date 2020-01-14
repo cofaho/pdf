@@ -1,6 +1,6 @@
 <?php
 
-namespace pdf\DataStructure\NameTree;
+namespace pdf\DataStructure\NumberTree;
 
 
 use pdf\DataStructure\Tree\AbstractNode;

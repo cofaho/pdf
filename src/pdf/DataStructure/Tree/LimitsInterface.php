@@ -1,6 +1,6 @@
 <?php
 
-namespace pdf\DataStructure\NameTree;
+namespace pdf\DataStructure\Tree;
 
 
 use pdf\ObjectType\ArrayObject;

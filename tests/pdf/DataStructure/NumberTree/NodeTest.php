@@ -1,6 +1,6 @@
 <?php
 
-namespace pdf\DataStructure\NameTree;
+namespace pdf\DataStructure\NumberTree;
 
 
 use pdf\ObjectType\IndirectObject;
@@ -21,13 +21,13 @@ class NodeTest extends TestCase
 
         $leaf1 = new Leaf();
         $leaf1
-            ->addName('leaf1-name2', $value)
-            ->addName('leaf1-name1', $value);
+            ->addNum(12, $value)
+            ->addNum(11, $value);
 
         $leaf2 = new Leaf();
         $leaf2
-            ->addName('leaf2-name1', $value)
-            ->addName('leaf2-name2', $value);
+            ->addNum(21, $value)
+            ->addNum(22, $value);
 
         $this->node
             ->addKid(new IndirectObject(1, 0, $leaf1))
@@ -38,12 +38,12 @@ class NodeTest extends TestCase
     {
         $limits = $this->node->getLimits();
 
-        self::assertEquals('leaf1-name1', $limits[0]->getString());
-        self::assertEquals('leaf2-name2', $limits[1]->getString());
+        self::assertEquals(11, $limits[0]);
+        self::assertEquals(22, $limits[1]);
     }
 
     public function test__toString()
     {
-        self::assertEquals('<</Kids [1 0 R 2 0 R] /Limits [(leaf1-name1) (leaf2-name2)]>>', (string)$this->node);
+        self::assertEquals('<</Kids [1 0 R 2 0 R] /Limits [11 22]>>', (string)$this->node);
     }
 }

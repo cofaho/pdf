@@ -3,8 +3,8 @@
 namespace pdf\DataStructure\NameTree;
 
 
+use pdf\DataStructure\Tree\AbstractLeaf;
 use pdf\ObjectType\ArrayObject;
-use pdf\ObjectType\DictionaryObject;
 use pdf\ObjectType\IndirectObject;
 use pdf\ObjectType\PdfObject;
 use pdf\ObjectType\StringObject;
@@ -13,19 +13,9 @@ use pdf\ObjectType\StringObject;
  * @property ArrayObject Names
  * @property ArrayObject Limits
  */
-class Leaf extends DictionaryObject implements LimitsInterface
+class Leaf extends AbstractLeaf
 {
     protected $isSorted = true;
-
-    /**
-     * @return string
-     */
-    public function __toString(): string
-    {
-        $this->Limits = $this->getLimits();
-
-        return parent::__toString();
-    }
 
     /**
      * @param string|StringObject $name

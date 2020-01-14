@@ -1,6 +1,8 @@
 <?php
 
-use pdf\DataStructure\NameTree\Leaf;
+namespace pdf\DataStructure\NameTree;
+
+
 use pdf\ObjectType\IndirectObject;
 use pdf\ObjectType\StringObject;
 use PHPUnit\Framework\TestCase;
