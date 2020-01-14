@@ -4,6 +4,7 @@ namespace pdf\DataStructure\NameTree;
 
 
 use pdf\ObjectType\ArrayObject;
+use pdf\ObjectType\DictionaryObject;
 use pdf\ObjectType\IndirectObject;
 use pdf\ObjectType\PdfObject;
 use pdf\ObjectType\StringObject;
@@ -12,7 +13,7 @@ use pdf\ObjectType\StringObject;
  * @property ArrayObject Names
  * @property ArrayObject Limits
  */
-class Leaf extends NameTree implements LimitsInterface
+class Leaf extends DictionaryObject implements LimitsInterface
 {
     protected $isSorted = true;
 

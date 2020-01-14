@@ -4,12 +4,13 @@ namespace pdf\DataStructure\NameTree;
 
 
 use pdf\ObjectType\ArrayObject;
+use pdf\ObjectType\DictionaryObject;
 use pdf\ObjectType\IndirectObject;
 
 /**
  * @property ArrayObject Kids
  */
-class Root extends NameTree
+class Root extends DictionaryObject
 {
     /**
      * @param IndirectObject $io
