@@ -4,7 +4,7 @@ namespace pdf\Document\Catalog\StructureTree;
 
 
 use lib\DataStructure\NumberTree;
-use pdf\DataStructure\NameTree;
+use pdf\DataStructure\NameTree\Root;
 use pdf\ObjectType\ArrayObject;
 use pdf\ObjectType\DictionaryObject;
 use pdf\ObjectType\NameObject;
@@ -12,7 +12,7 @@ use pdf\ObjectType\NameObject;
 /**
  * @property-read NameObject Type
  * @property DictionaryObject|ArrayObject K
- * @property NameTree IDTree
+ * @property Root IDTree
  * @property NumberTree ParentTree
  * @property integer ParentTreeNextKey
  * @property DictionaryObject RoleMap
