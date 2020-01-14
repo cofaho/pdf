@@ -33,4 +33,9 @@ class ArrayObjectTest extends TestCase
         self::assertEquals([1, 2, 3], $b);
     }
 
+    public function testIndirectObject()
+    {
+        $a = new ArrayObject([1, 2, new IndirectObject(1, 0, new StringObject('string'))]);
+        self::assertEquals('[1 2 1 0 R]', (string)$a);
+    }
 }

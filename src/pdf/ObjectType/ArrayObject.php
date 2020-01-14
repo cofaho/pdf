@@ -34,7 +34,11 @@ class ArrayObject implements PdfObject, ArrayAccess, Iterator, Countable
      */
     public function __toString(): string
     {
-        return '[' . implode(' ', $this->items) . ']';
+        $items = [];
+        foreach ($this->items as $item) {
+            $items[] = $item instanceof IndirectObject ? $item->getReference() : $item;
+        }
+        return '[' . implode(' ', $items) . ']';
     }
 
     /**

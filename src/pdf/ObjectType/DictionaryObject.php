@@ -30,6 +30,9 @@ class DictionaryObject implements PdfObject
         $pairs = [];
         if ($this->items) {
             foreach ($this->items as $name => $value) {
+                if ($value instanceof IndirectObject) {
+                    $value = $value->getReference();
+                }
                 $pairs[] = '/' . $name . ' ' . $value;
             }
         }

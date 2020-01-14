@@ -19,4 +19,13 @@ class DictionaryObjectTest extends TestCase
         self::assertEquals('<</name1 1 /name2 (string) /name3 <</subname1 22>> /a [1 2 3]>>', (string)$d);
     }
 
+    public function testIndirectObject()
+    {
+        $d = new DictionaryObject([
+            'name1' => 1,
+            'name2' => new IndirectObject(1, 0, new StringObject('string')),
+        ]);
+        self::assertEquals('<</name1 1 /name2 1 0 R>>', (string)$d);
+    }
+
 }
